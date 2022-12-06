@@ -29,5 +29,26 @@ func parseLine(line string) []Item {
 }
 
 func Part2(input string) (string, error) {
-	return "", nil
+	lines := strings.Split(input, "\n")
+
+	var totalPriority int
+	for i := 0; i < len(lines); i += 3 {
+		rucksacks := make([]Rucksack, 3)
+		for j, line := range lines[i : i+3] {
+			items := parseLine(line)
+			rucksack := NewRucksack(items)
+			rucksacks[j] = *rucksack
+		}
+
+		group := NewGroup(rucksacks)
+		commomItem, found := group.FindCommomItem()
+		if !found {
+			return "", errors.New("Group has no item in commom")
+		}
+
+		totalPriority += commomItem.Priority()
+	}
+
+	result := strconv.Itoa(totalPriority)
+	return result, nil
 }

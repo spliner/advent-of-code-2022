@@ -52,7 +52,7 @@ CrZsJsPPZsGzwwsLwLmpwMDw`
 
 	got, err := day3.Part1(input)
 	if err != nil {
-		t.Fatal("expected no error", err)
+		t.Fatal("expected no error, got", err)
 	}
 
 	want := "157"
@@ -62,4 +62,20 @@ CrZsJsPPZsGzwwsLwLmpwMDw`
 }
 
 func TestPart2(t *testing.T) {
+	input := `vJrwpWtwJgWrhcsFMMfFFhFp
+jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
+PmmdzqPrVvPwwTWBwg
+wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
+ttgJtRGJQctTZtZT
+CrZsJsPPZsGzwwsLwLmpwMDw`
+
+	got, err := day3.Part2(input)
+	if err != nil {
+		t.Fatal("expected no error, got", err)
+	}
+
+	want := "70"
+	if got != want {
+		t.Fatalf("got %s, want %s", got, want)
+	}
 }
