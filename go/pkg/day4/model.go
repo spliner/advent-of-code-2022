@@ -23,6 +23,11 @@ func NewAssignmentPair(firstRange, secondRange *Range) *AssignmentPair {
 }
 
 func (p *AssignmentPair) HasFullOverlap() bool {
+	smallerRange, largerRange := p.orderedRanges()
+	return largerRange.Start <= smallerRange.Start && largerRange.End >= smallerRange.End
+}
+
+func (p *AssignmentPair) orderedRanges() (*Range, *Range) {
 	var smallerRange, largerRange *Range
 	if p.FirstRange.Size() < p.SecondRange.Size() {
 		smallerRange = p.FirstRange
@@ -32,5 +37,10 @@ func (p *AssignmentPair) HasFullOverlap() bool {
 		largerRange = p.FirstRange
 	}
 
-	return largerRange.Start <= smallerRange.Start && largerRange.End >= smallerRange.End
+	return smallerRange, largerRange
+}
+
+func (p *AssignmentPair) HasAnyOverlap() bool {
+	smallerRange, largerRange := p.orderedRanges()
+	return smallerRange.Start <= largerRange.End && smallerRange.End >= largerRange.Start
 }

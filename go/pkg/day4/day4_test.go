@@ -37,7 +37,7 @@ func TestPart2(t *testing.T) {
 		t.Fatal("expected no error, got", err)
 	}
 
-	want := "TODO"
+	want := "4"
 	if got != want {
 		t.Fatalf("got %s, want %s", got, want)
 	}

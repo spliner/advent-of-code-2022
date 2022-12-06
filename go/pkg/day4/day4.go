@@ -54,5 +54,19 @@ func parseRange(rawRange string) (*Range, error) {
 }
 
 func Part2(input string) (string, error) {
-	return "", nil
+	lines := strings.Split(input, "\n")
+	var count int
+	for _, line := range lines {
+		pair, err := parseLine(line)
+		if err != nil {
+			return "", err
+		}
+
+		if pair.HasAnyOverlap() {
+			count++
+		}
+	}
+
+	result := strconv.Itoa(count)
+	return result, nil
 }
