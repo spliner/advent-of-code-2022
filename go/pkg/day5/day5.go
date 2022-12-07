@@ -16,7 +16,7 @@ func Part1(input string) (string, error) {
 	}
 
 	for _, command := range commands {
-		command.execute(crane)
+		command.Execute(crane)
 	}
 
 	values := crane.Peek()
@@ -82,5 +82,16 @@ func parseInput(input string) (*Crane, []Command, error) {
 }
 
 func Part2(input string) (string, error) {
-	return "", nil
+	crane, commands, err := parseInput(input)
+	if err != nil {
+		return "", err
+	}
+
+	for _, command := range commands {
+		command.ExecuteOrdered(crane)
+	}
+
+	values := crane.Peek()
+	result := strings.Join(values, "")
+	return result, nil
 }

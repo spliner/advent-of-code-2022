@@ -30,7 +30,7 @@ type Command struct {
 	quantity           int
 }
 
-func (c *Command) execute(crane *Crane) error {
+func (c *Command) Execute(crane *Crane) error {
 	originStack, ok := crane.Get(c.originStackId)
 	if !ok {
 		return fmt.Errorf("stack %s not found", c.originStackId)
@@ -42,12 +42,40 @@ func (c *Command) execute(crane *Crane) error {
 	}
 
 	for i := 0; i < c.quantity; i++ {
-		create, ok := originStack.Pop()
+		crate, ok := originStack.Pop()
 		if !ok {
 			break
 		}
 
-		destinationStack.Push(create)
+		destinationStack.Push(crate)
+	}
+
+	return nil
+}
+
+func (c *Command) ExecuteOrdered(crane *Crane) error {
+	originStack, ok := crane.Get(c.originStackId)
+	if !ok {
+		return fmt.Errorf("stack %s not found", c.originStackId)
+	}
+
+	destinationStack, ok := crane.Get(c.destinationStackId)
+	if !ok {
+		return fmt.Errorf("stack %s not found", c.destinationStackId)
+	}
+
+	crates := make([]string, 0)
+	for i := 0; i < c.quantity; i++ {
+		crate, ok := originStack.Pop()
+		if !ok {
+			break
+		}
+
+		crates = append(crates, crate)
+	}
+
+	for i := len(crates) - 1; i >= 0; i-- {
+		destinationStack.Push(crates[i])
 	}
 
 	return nil

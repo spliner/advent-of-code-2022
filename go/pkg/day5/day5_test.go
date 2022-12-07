@@ -43,7 +43,7 @@ move 1 from 1 to 2`
 		t.Fatal("expected no error, got", err)
 	}
 
-	want := "TODO"
+	want := "MCD"
 	if got != want {
 		t.Fatalf("got %s, want %s", got, want)
 	}
