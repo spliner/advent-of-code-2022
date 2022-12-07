@@ -10,21 +10,21 @@ import (
 )
 
 func Part1(input string) (string, error) {
-	foo, commands, err := parseInput(input)
+	crane, commands, err := parseInput(input)
 	if err != nil {
 		return "", err
 	}
 
 	for _, command := range commands {
-		command.execute(foo)
+		command.execute(crane)
 	}
 
-	values := foo.peek()
+	values := crane.Peek()
 	result := strings.Join(values, "")
 	return result, nil
 }
 
-func parseInput(input string) (*foo, []command, error) {
+func parseInput(input string) (*Crane, []Command, error) {
 	split := strings.Split(input, "\n\n")
 	stackLines := strings.Split(split[0], "\n")
 
@@ -40,9 +40,7 @@ func parseInput(input string) (*foo, []command, error) {
 		}
 	}
 
-	foo := &foo{orderedIds: orderedStackIds, stacks: stacks}
-	// 5  -  2
-	// 29 -  x
+	crane := &Crane{orderedIds: orderedStackIds, stacks: stacks}
 	for i := len(stackLines) - 2; i >= 0; i-- {
 		line := stackLines[i]
 		runes := []rune(line)
@@ -60,7 +58,7 @@ func parseInput(input string) (*foo, []command, error) {
 	}
 
 	commandLines := strings.Split(split[1], "\n")
-	commands := make([]command, 0)
+	commands := make([]Command, 0)
 	for _, line := range commandLines {
 		matches := re.FindStringSubmatch(line)
 		if len(matches) != 4 {
@@ -73,14 +71,14 @@ func parseInput(input string) (*foo, []command, error) {
 
 		originStackId := matches[2]
 		destinationStackId := matches[3]
-		command := command{
+		command := Command{
 			originStackId:      originStackId,
 			destinationStackId: destinationStackId,
 			quantity:           quantity,
 		}
 		commands = append(commands, command)
 	}
-	return foo, commands, nil
+	return crane, commands, nil
 }
 
 func Part2(input string) (string, error) {

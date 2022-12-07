@@ -5,38 +5,38 @@ import (
 	"fmt"
 )
 
-type foo struct {
+type Crane struct {
 	orderedIds []string
 	stacks     map[string]*stack.Stack[string]
 }
 
-func (s *foo) get(id string) (*stack.Stack[string], bool) {
-	stack, ok := s.stacks[id]
+func (c *Crane) Get(id string) (*stack.Stack[string], bool) {
+	stack, ok := c.stacks[id]
 	return stack, ok
 }
 
-func (s *foo) peek() []string {
-	values := make([]string, len(s.orderedIds))
-	for i, id := range s.orderedIds {
-		value, _ := s.stacks[id].Peek()
+func (c *Crane) Peek() []string {
+	values := make([]string, len(c.orderedIds))
+	for i, id := range c.orderedIds {
+		value, _ := c.stacks[id].Peek()
 		values[i] = value
 	}
 	return values
 }
 
-type command struct {
+type Command struct {
 	originStackId      string
 	destinationStackId string
 	quantity           int
 }
 
-func (c *command) execute(stacks *foo) error {
-	originStack, ok := stacks.get(c.originStackId)
+func (c *Command) execute(crane *Crane) error {
+	originStack, ok := crane.Get(c.originStackId)
 	if !ok {
 		return fmt.Errorf("stack %s not found", c.originStackId)
 	}
 
-	destinationStack, ok := stacks.get(c.destinationStackId)
+	destinationStack, ok := crane.Get(c.destinationStackId)
 	if !ok {
 		return fmt.Errorf("stack %s not found", c.destinationStackId)
 	}
