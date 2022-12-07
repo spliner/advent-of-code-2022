@@ -38,35 +38,24 @@ func TestPop(t *testing.T) {
 	stack.Push(2)
 	stack.Push(3)
 
+	assert := func(expectedValue, actualValue int, ok bool) {
+		if !ok {
+			t.Fatal("expected Pop to return a value")
+		}
+
+		if actualValue != expectedValue {
+			t.Fatalf("got %d, want %d", actualValue, expectedValue)
+		}
+	}
+
 	got, ok := stack.Pop()
-	if !ok {
-		t.Fatal("expected Pop to return a value")
-	}
-
-	want := 3
-	if got != want {
-		t.Fatalf("got %d, want %d", got, want)
-	}
+	assert(3, got, ok)
 
 	got, ok = stack.Pop()
-	if !ok {
-		t.Fatal("expected Pop to return a value")
-	}
-
-	want = 2
-	if got != want {
-		t.Fatalf("got %d, want %d", got, want)
-	}
+	assert(2, got, ok)
 
 	got, ok = stack.Pop()
-	if !ok {
-		t.Fatal("expected Pop to return a value")
-	}
-
-	want = 1
-	if got != want {
-		t.Fatalf("got %d, want %d", got, want)
-	}
+	assert(1, got, ok)
 
 	_, ok = stack.Pop()
 	if ok {
