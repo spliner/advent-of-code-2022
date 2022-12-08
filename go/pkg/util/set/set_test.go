@@ -57,3 +57,54 @@ func TestContains(t *testing.T) {
 	})
 
 }
+
+func TestRemoveExistingItem(t *testing.T) {
+	set := set.NewSet[string]()
+	set.Add("test")
+
+	got := set.Remove("test")
+
+	want := true
+	if got != want {
+		t.Fatalf("got %v, want %v", got, want)
+	}
+
+	if !set.IsEmpty() {
+		t.Fatal("expected set to be empty")
+	}
+}
+
+func TestRemoveNonExistingItem(t *testing.T) {
+	set := set.NewSet[string]()
+	set.Add("test")
+
+	got := set.Remove("foo")
+
+	want := false
+	if got != want {
+		t.Fatalf("got %v, want %v", got, want)
+	}
+
+	if set.IsEmpty() {
+		t.Fatal("expected set to not be empty")
+	}
+}
+
+func TestLenght(t *testing.T) {
+	set := set.NewSet[string]()
+
+	set.Add("1")
+	if set.Length() != 1 {
+		t.Fatal("expected length to be 1")
+	}
+
+	set.Add("2")
+	if set.Length() != 2 {
+		t.Fatal("expected length to be 2")
+	}
+
+	set.Remove("1")
+	if set.Length() != 1 {
+		t.Fatal("expected length to be 1")
+	}
+}

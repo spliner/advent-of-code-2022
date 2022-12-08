@@ -10,8 +10,12 @@ func NewSet[T comparable]() *Set[T] {
 	return &Set[T]{items: make(map[T]struct{})}
 }
 
+func (s *Set[T]) Length() int {
+	return len(s.items)
+}
+
 func (s *Set[T]) IsEmpty() bool {
-	return len(s.items) == 0
+	return s.Length() == 0
 }
 
 func (s *Set[T]) Add(item T) bool {
@@ -20,6 +24,15 @@ func (s *Set[T]) Add(item T) bool {
 	}
 
 	s.items[item] = marker
+	return true
+}
+
+func (s *Set[T]) Remove(item T) bool {
+	if _, ok := s.items[item]; !ok {
+		return false
+	}
+
+	delete(s.items, item)
 	return true
 }
 
