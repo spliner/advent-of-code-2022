@@ -10,6 +10,14 @@ func NewSet[T comparable]() *Set[T] {
 	return &Set[T]{items: make(map[T]struct{})}
 }
 
+func NewSetFromSlice[T comparable](slice []T) *Set[T] {
+	set := NewSet[T]()
+	for _, item := range slice {
+		set.Add(item)
+	}
+	return set
+}
+
 func (s *Set[T]) Length() int {
 	return len(s.items)
 }

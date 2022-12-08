@@ -108,3 +108,19 @@ func TestLenght(t *testing.T) {
 		t.Fatal("expected length to be 1")
 	}
 }
+
+func TestNewSetFromSlice(t *testing.T) {
+	slice := []string{"1", "2", "2", "3"}
+
+	set := set.NewSetFromSlice(slice)
+
+	if set.Length() != 3 {
+		t.Fatal("expected length to be 3")
+	}
+
+	for _, item := range slice {
+		if !set.Contains(item) {
+			t.Fatalf("expected set to contain %s", item)
+		}
+	}
+}
