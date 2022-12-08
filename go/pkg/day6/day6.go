@@ -25,5 +25,7 @@ func marker(input string, size int) int {
 }
 
 func Part2(input string) (string, error) {
-	return "", nil
+	marker := marker(input, 14)
+	result := strconv.Itoa(marker)
+	return result, nil
 }
