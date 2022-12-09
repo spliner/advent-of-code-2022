@@ -81,3 +81,49 @@ func (p *Patch) IsVisible(tree *Tree) bool {
 
 	return visible
 }
+
+// I'm pretty sure I can use this to calculate whether
+// a Tree is visible or not, but I'm already late in
+// AoC's calendar!
+func (p *Patch) ScenicScore(tree *Tree) int {
+	leftScore := 0
+	for x := tree.X() - 1; x >= 0; x-- {
+		leftScore++
+		otherTree := p.trees[tree.Y()][x]
+		if otherTree.Height() >= tree.Height() {
+			break
+		}
+	}
+
+	rightScore := 0
+	for x := tree.X() + 1; x < p.width; x++ {
+		rightScore++
+		otherTree := p.trees[tree.Y()][x]
+		if otherTree.Height() >= tree.Height() {
+			break
+		}
+	}
+
+	topScore := 0
+	for y := tree.Y() - 1; y >= 0; y-- {
+		topScore++
+		otherTree := p.trees[y][tree.X()]
+		if otherTree.Height() >= tree.Height() {
+			break
+		}
+	}
+
+	bottomScore := 0
+	for y := tree.Y() + 1; y < p.height; y++ {
+		bottomScore++
+		otherTree := p.trees[y][tree.X()]
+		if otherTree.Height() >= tree.Height() {
+			break
+		}
+	}
+
+	return leftScore *
+		rightScore *
+		topScore *
+		bottomScore
+}

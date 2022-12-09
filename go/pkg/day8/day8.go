@@ -37,5 +37,17 @@ func parseInput(input string) *model.Patch {
 }
 
 func Part2(input string) (string, error) {
-	return "", nil
+	patch := parseInput(input)
+	var maxScore int
+	for _, trees := range patch.Trees() {
+		for _, tree := range trees {
+			score := patch.ScenicScore(tree)
+			if score > maxScore {
+				maxScore = score
+			}
+		}
+	}
+
+	result := strconv.Itoa(maxScore)
+	return result, nil
 }
