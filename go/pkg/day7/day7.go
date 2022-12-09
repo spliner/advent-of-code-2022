@@ -8,6 +8,24 @@ import (
 )
 
 func Part1(input string) (string, error) {
+	directories, _, err := parseInput(input)
+	if err != nil {
+		return "", err
+	}
+
+	var totalSize int
+	for _, directory := range directories {
+		directorySize := directory.Size()
+		if directorySize <= 100000 {
+			totalSize += directorySize
+		}
+	}
+
+	result := strconv.Itoa(totalSize)
+	return result, nil
+}
+
+func parseInput(input string) ([]*model.Directory, *model.Directory, error) {
 	lines := strings.Split(input, "\n")
 	directories := make([]*model.Directory, 0)
 	rootDirectory := model.NewDirectory("/", nil)
@@ -34,7 +52,7 @@ func Part1(input string) (string, error) {
 				} else {
 					size, err := strconv.Atoi(split[0])
 					if err != nil {
-						return "", err
+						return nil, nil, err
 					}
 					file := model.NewFile(split[1], size)
 					currentDirectory.AddFile(file)
@@ -49,7 +67,7 @@ func Part1(input string) (string, error) {
 				name := split[2]
 				child, ok := currentDirectory.FindChild(name)
 				if !ok {
-					return "", fmt.Errorf("could not find directory %s", argument)
+					return nil, nil, fmt.Errorf("could not find directory %s", argument)
 				}
 				currentDirectory = child
 			}
@@ -57,18 +75,30 @@ func Part1(input string) (string, error) {
 		}
 	}
 
-	var totalSize int
-	for _, directory := range directories {
-		directorySize := directory.Size()
-		if directorySize <= 100000 {
-			totalSize += directorySize
-		}
-	}
-
-	result := strconv.Itoa(totalSize)
-	return result, nil
+	return directories, rootDirectory, nil
 }
 
 func Part2(input string) (string, error) {
-	return "", nil
+	directories, root, err := parseInput(input)
+	if err != nil {
+		return "", err
+	}
+
+	diskSpace := 70000000
+	usedSpace := root.Size()
+	targetSpace := 30000000
+	candidateSize := usedSpace
+	for _, dir := range directories[1:] {
+		dirSize := dir.Size()
+		if diskSpace-usedSpace+dirSize < targetSpace {
+			continue
+		}
+
+		if dirSize < candidateSize {
+			candidateSize = dirSize
+		}
+	}
+
+	result := strconv.Itoa(candidateSize)
+	return result, nil
 }
