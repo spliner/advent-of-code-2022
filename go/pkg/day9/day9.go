@@ -16,7 +16,7 @@ var commandMap = map[string]func(r *model.Rope){
 }
 
 func Part1(input string) (string, error) {
-	count, err := execute(input)
+	count, err := execute(input, 2)
 	if err != nil {
 		return "", err
 	}
@@ -25,9 +25,12 @@ func Part1(input string) (string, error) {
 	return result, nil
 }
 
-func execute(input string) (int, error) {
+func execute(input string, knotCount int) (int, error) {
 	set := set.NewSet[model.Position]()
-	rope := model.NewRope()
+	rope := model.NewRope(knotCount)
+
+	set.Add(*rope.Tail())
+
 	lines := strings.Split(input, "\n")
 	for _, line := range lines {
 		split := strings.Split(line, " ")
@@ -51,5 +54,11 @@ func execute(input string) (int, error) {
 }
 
 func Part2(input string) (string, error) {
-	return "", nil
+	count, err := execute(input, 10)
+	if err != nil {
+		return "", err
+	}
+
+	result := strconv.Itoa(count)
+	return result, nil
 }

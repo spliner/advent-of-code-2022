@@ -1,36 +1,42 @@
 package model
 
-import "math"
+import (
+	"math"
+)
 
 type Rope struct {
-	head *Position
-	tail *Position
+	knots []*Position
 }
 
-func NewRope() *Rope {
+func NewRope(knotCount int) *Rope {
+	knots := make([]*Position, knotCount)
+	for i := 0; i < knotCount; i++ {
+		knots[i] = &Position{0, 0}
+	}
 	return &Rope{
-		head: &Position{
-			X: 0,
-			Y: 0,
-		},
-		tail: &Position{
-			X: 0,
-			Y: 0,
-		},
+		knots: knots,
 	}
 }
 
 func (r *Rope) Head() *Position {
-	return r.head
+	return r.knots[0]
 }
 
 func (r *Rope) Tail() *Position {
-	return r.tail
+	return r.knots[len(r.knots)-1]
 }
 
 func (r *Rope) onHeadMove() {
-	horizontalDistance := r.head.X - r.tail.X
-	verticalDistance := r.head.Y - r.tail.Y
+	previousKnot := r.Head()
+	for _, knot := range r.knots[1:] {
+		onMove(previousKnot, knot)
+		previousKnot = knot
+	}
+}
+
+func onMove(previousKnot, knot *Position) {
+	horizontalDistance := previousKnot.X - knot.X
+	verticalDistance := previousKnot.Y - knot.Y
 
 	absHorizontalDistance := math.Abs(float64(horizontalDistance))
 	absVerticalDistance := math.Abs(float64(verticalDistance))
@@ -40,41 +46,52 @@ func (r *Rope) onHeadMove() {
 	}
 
 	var newX, newY int
-	if absHorizontalDistance > absVerticalDistance {
-		if horizontalDistance > 0 {
-			newX = r.head.X - 1
-		} else {
-			newX = r.head.X + 1
-		}
-		newY = r.head.Y
-	} else if absVerticalDistance > absHorizontalDistance {
+	if absVerticalDistance > absHorizontalDistance {
 		if verticalDistance > 0 {
-			newY = r.head.Y - 1
+			newY = previousKnot.Y - 1
 		} else {
-			newY = r.head.Y + 1
+			newY = previousKnot.Y + 1
 		}
-		newX = r.head.X
+		newX = previousKnot.X
+	} else if absHorizontalDistance > absVerticalDistance {
+		if horizontalDistance > 0 {
+			newX = previousKnot.X - 1
+		} else {
+			newX = previousKnot.X + 1
+		}
+		newY = previousKnot.Y
+	} else {
+		if verticalDistance > 0 {
+			newY = previousKnot.Y - 1
+		} else {
+			newY = previousKnot.Y + 1
+		}
+		if horizontalDistance > 0 {
+			newX = previousKnot.X - 1
+		} else {
+			newX = previousKnot.X + 1
+		}
 	}
-	r.tail.X = newX
-	r.tail.Y = newY
+	knot.X = newX
+	knot.Y = newY
 }
 
 func (r *Rope) MoveRight() {
-	r.head.X++
+	r.Head().X++
 	r.onHeadMove()
 }
 
 func (r *Rope) MoveLeft() {
-	r.head.X--
+	r.Head().X--
 	r.onHeadMove()
 }
 
 func (r *Rope) MoveUp() {
-	r.head.Y++
+	r.Head().Y++
 	r.onHeadMove()
 }
 
 func (r *Rope) MoveDown() {
-	r.head.Y--
+	r.Head().Y--
 	r.onHeadMove()
 }

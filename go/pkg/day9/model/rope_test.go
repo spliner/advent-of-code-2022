@@ -44,7 +44,7 @@ func TestLinearMove(t *testing.T) {
 	for _, test := range testCases {
 		name := fmt.Sprintf("test move %s", test.direction)
 		t.Run(name, func(t *testing.T) {
-			rope := model.NewRope()
+			rope := model.NewRope(2)
 			test.moveFunc(rope)
 			test.moveFunc(rope)
 
@@ -62,7 +62,7 @@ func TestLinearMove(t *testing.T) {
 }
 
 func TestDiagonalMove(t *testing.T) {
-	rope := model.NewRope()
+	rope := model.NewRope(2)
 	rope.MoveRight()
 	rope.MoveUp()
 	rope.MoveUp()
